@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Решения - GAIA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Базовые стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c5530;
+            --secondary-color: #4a7c59;
+            --accent-color: #8fb996;
+            --text-dark: #333;
+            --text-light: #666;
+            --background-light: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Шапка */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        /* Хлебные крошки */
+        .breadcrumb {
+            background: var(--white);
+            padding: 100px 0 40px;
+            margin-top: 80px;
+        }
+
+        .breadcrumb-links {
+            display: flex;
+            gap: 10px;
+            color: var(--text-light);
+        }
+
+        .breadcrumb-links a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Сетка решений */
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            padding: 60px 0;
+        }
+
+        .solution-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .solution-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3rem;
+        }
+
+        .solution-content {
+            padding: 30px;
+        }
+
+        .solution-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .solution-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .solution-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .solution-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            color: var(--text-light);
+        }
+
+        .solution-features li:last-child {
+            border-bottom: none;
+        }
+
+        .solution-features li i {
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        /* Секция преимуществ по отраслям */
+        .industry-benefits {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .benefits-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: var(--background-light);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--background-light);
+            border-radius: 10px;
+        }
+
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        /* СТА */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-light {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        .btn-light:hover {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        /* Футер */
+        footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #999;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .solutions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefit-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .benefit-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">GAIA</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="solutions.html" class="active">Решения</a></li>
+                    <li><a href="calculator.html">Калькулятор</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Хлебные крошки -->
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-links">
+                <a href="index.html">Главная</a>
+                <span>/</span>
+                <span>Решения</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <section class="solutions-intro">
+            <h1 class="section-title">Решения для вашего бизнеса</h1>
+            <p class="section-subtitle">Подберем оптимальную модель деструктора под ваши задачи и объемы отходов</p>
+            
+            <div class="solutions-grid">
+                <!-- Решение 1 -->
+                <div class="solution-card">
+                    <div class="solution-image">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="solution-content">
+                        <div class="solution-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3 class="solution-title">Для ресторанов и кафе</h3>
+                        <p>Эффективное решение для утилизации пищевых отходов в заведениях общественного питания</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Устранение запахов</li>
+                            <li><i class="fas fa-check"></i> Соблюдение СанПиН</li>
+                            <li><i class="fas fa-check"></i> Экономия на вывозе</li>
+                            <li><i class="fas fa-check"></i> Компактные размеры</li>
+                        </ul>
+                        <a href="#" class="btn">Подробнее</a>
+                    </div>
+                </div>
+
+                <!-- Решение 2 -->
+                <div class="solution-card">
+                    <div class="solution-image">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <div class="solution-content">
+                        <div class="solution-icon">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <h3 class="solution-title">Для пищевых производств</h3>
+                        <p>Промышленные решения для крупных объемов отходов пищевой промышленности</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Большая производительность</li>
+                            <li><i class="fas fa-check"></i> Автоматизация процессов</li>
+                            <li><i class="fas fa-check"></i> Снижение экосбора</li>
+                            <li><i class="fas fa-check"></i> Непрерывный цикл работы</li>
+                        </ul>
+                        <a href="#" class="btn">Подробнее</a>
+                    </div>
+                </div>
+
+                <!-- Решение 3 -->
+                <div class="solution-card">
+                    <div class="solution-image">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="solution-content">
+                        <div class="solution-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <h3 class="solution-title">Для медицинских учреждений</h3>
+                        <p>Безопасная утилизация биологических и пищевых отходов в больницах и лабораториях</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Полная стерилизация</li>
+                            <li><i class="fas fa-check"></i> Соответствие ГОСТам</li>
+                            <li><i class="fas fa-check"></i> Безопасность персонала</li>
+                            <li><i class="fas fa-check"></i> Автоклавный эффект</li>
+                        </ul>
+                        <a href="#" class="btn">Подробнее</a>
+                    </div>
+                </div>
+
+                <!-- Решение 4 -->
+                <div class="solution-card">
+                    <div class="solution-image">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <div class="solution-content">
+                        <div class="solution-icon">
+                            <i class="fas fa-tractor"></i>
+                        </div>
+                        <h3 class="solution-title">Для сельского хозяйства</h3>
+                        <p>Переработка органических отходов в ценные кормовые добавки и удобрения</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Производство кормов</li>
+                            <li><i class="fas fa-check"></i> Создание удобрений</li>
+                            <li><i class="fas fa-check"></i> Утилизация падежа</li>
+                            <li><i class="fas fa-check"></i> Повышение рентабельности</li>
+                        </ul>
+                        <a href="#" class="btn">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Преимущества по отраслям -->
+    <section class="industry-benefits">
+        <div class="container">
+            <h2 class="section-title">Ключевые преимущества для каждой отрасли</h2>
+            
+            <div class="benefits-tabs">
+                <button class="tab-btn active" data-tab="restaurants">Рестораны</button>
+                <button class="tab-btn" data-tab="production">Производства</button>
+                <button class="tab-btn" data-tab="medical">Медицина</button>
+                <button class="tab-btn" data-tab="agriculture">Сельское хозяйство</button>
+            </div>
+
+            <div class="tab-content active" id="restaurants-tab">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div>
+                        <h3>Экономия до 40 000 руб./мес</h3>
+                        <p>Снижение расходов на вывоз мусора и получение дополнительного дохода от продажи сырья</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div>
+                        <h3>Улучшение имиджа</h3>
+                        <p>"Зеленый" статус и экологическая ответственность повышают лояльность гостей</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3>100% соответствие нормам</h3>
+                        <p>Полное соблюдение требований Роспотребнадзора и СанПиН</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="production-tab">
+                <!-- Контент для производств -->
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3>Снижение экологического сбора</h3>
+                        <p>Легальное уменьшение платежей за негативное воздействие на окружающую среду</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div>
+                        <h3>Заводская гарантия 2 года</h3>
+                        <p>Надежное оборудование для непрерывного производственного цикла</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA секция -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Нужна консультация?</h2>
+                <p>Наши специалисты подберут оптимальное решение для вашего бизнеса и рассчитают экономический эффект</p>
+                <div class="cta-buttons">
+                    <a href="contacts.html" class="btn btn-light">Получить консультацию</a>
+                    <a href="calculator.html" class="btn btn-secondary">Рассчитать экономию</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>GAIA</h3>
+                    <p>Профессиональные решения для утилизации органических отходов</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> +7 (XXX) XXX-XX-XX</li>
+                        <li><i class="fas fa-envelope"></i> info@gaia-ru.ru</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Адрес компании</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Решения</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Для ресторанов</a></li>
+                        <li><a href="#">Для производств</a></li>
+                        <li><a href="#">Для больниц</a></li>
+                        <li><a href="#">Для сельского хозяйства</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GAIA. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Табы для преимуществ
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Удаляем активный класс у всех кнопок и контента
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Добавляем активный класс текущей кнопке
+                    btn.classList.add('active');
+                    
+                    // Показываем соответствующий контент
+                    const tabId = btn.getAttribute('data-tab') + '-tab';
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

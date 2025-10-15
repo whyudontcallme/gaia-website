@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор окупаемости - GAIA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Базовые стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c5530;
+            --secondary-color: #4a7c59;
+            --accent-color: #8fb996;
+            --text-dark: #333;
+            --text-light: #666;
+            --background-light: #f8f9fa;
+            --white: #ffffff;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 20px 40px;
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Шапка */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        /* Хлебные крошки */
+        .breadcrumb {
+            background: var(--white);
+            padding: 100px 0 40px;
+            margin-top: 80px;
+        }
+
+        .breadcrumb-links {
+            display: flex;
+            gap: 10px;
+            color: var(--text-light);
+        }
+
+        .breadcrumb-links a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Калькулятор */
+        .calculator-section {
+            padding: 60px 0;
+        }
+
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .calculator-form {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: var(--white);
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .range-value {
+            min-width: 80px;
+            padding: 8px 12px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        /* Результаты */
+        .results-sidebar {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 120px;
+        }
+
+        .result-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .result-value.success {
+            color: var(--success-color);
+        }
+
+        .result-value.warning {
+            color: var(--warning-color);
+        }
+
+        .result-unit {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-left: 5px;
+        }
+
+        /* График */
+        .chart-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+
+        .chart-placeholder {
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--background-light);
+            border-radius: 10px;
+            color: var(--text-light);
+        }
+
+        /* Детали расчета */
+        .calculation-details {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .detail-card {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .detail-card:hover {
+            border-color: var(--primary-color);
+        }
+
+        .detail-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .detail-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .detail-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* CTA секция */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Футер */
+        footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #999;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 968px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .results-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .calculator-form,
+            .results-sidebar {
+                padding: 25px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">GAIA</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="solutions.html">Решения</a></li>
+                    <li><a href="calculator.html" class="active">Калькулятор</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Хлебные крошки -->
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-links">
+                <a href="index.html">Главная</a>
+                <span>/</span>
+                <span>Калькулятор окупаемости</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Калькулятор -->
+    <section class="calculator-section">
+        <div class="container">
+            <h1 class="section-title">Калькулятор окупаемости</h1>
+            <p class="section-subtitle">Рассчитайте экономический эффект от внедрения системы GAIA для вашего бизнеса</p>
+            
+            <div class="calculator-container">
+                <!-- Форма ввода -->
+                <div class="calculator-form">
+                    <form id="calculatorForm">
+                        <div class="form-group">
+                            <label class="form-label">Отрасль</label>
+                            <select class="form-select" id="industry">
+                                <option value="restaurant">Ресторан/Кафе</option>
+                                <option value="production">Пищевое производство</option>
+                                <option value="hospital">Медицинское учреждение</option>
+                                <option value="agriculture">Сельское хозяйство</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Объем отходов в месяц</label>
+                            <div class="range-container">
+                                <input type="range" id="wasteVolume" min="100" max="10000" step="100" value="1000">
+                                <div class="range-value" id="volumeValue">1 000 кг</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Текущие расходы на вывоз отходов</label>
+                            <div class="range-container">
+                                <input type="range" id="currentCost" min="5000" max="200000" step="5000" value="30000">
+                                <div class="range-value" id="costValue">30 000 ₽</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Стоимость электроэнергии</label>
+                            <div class="range-container">
+                                <input type="range" id="energyCost" min="3" max="10" step="0.1" value="5">
+                                <div class="range-value" id="energyValue">5 ₽/кВт·ч</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Модель оборудования</label>
+                            <select class="form-select" id="equipmentModel">
+                                <option value="compact">GAIA Compact - 1 200 000 ₽</option>
+                                <option value="standard" selected>GAIA Standard - 1 800 000 ₽</option>
+                                <option value="premium">GAIA Premium - 2 500 000 ₽</option>
+                                <option value="industrial">GAIA Industrial - 3 500 000 ₽</option>
+                            </select>
+                        </div>
+
+                        <button type="button" class="btn btn-large" onclick="calculateROI()" style="width: 100%;">
+                            <i class="fas fa-calculator"></i> Рассчитать окупаемость
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Результаты -->
+                <div class="results-sidebar">
+                    <h3 style="color: var(--primary-color); margin-bottom: 30px; text-align: center;">Результаты расчета</h3>
+                    
+                    <div class="result-item">
+                        <div class="result-label">Ежемесячная экономия</div>
+                        <div class="result-value" id="monthlySavings">-</div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">Срок окупаемости</div>
+                        <div class="result-value" id="paybackPeriod">-</div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">Годовая прибыль</div>
+                        <div class="result-value success" id="annualProfit">-</div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">ROI за 3 года</div>
+                        <div class="result-value success" id="roi3years">-</div>
+                    </div>
+
+                    <div style="margin-top: 30px; padding: 20px; background: var(--background-light); border-radius: 10px;">
+                        <p style="color: var(--text-light); font-size: 0.9rem; text-align: center;">
+                            <i class="fas fa-info-circle"></i> Расчет является предварительным. Для точного расчета свяжитесь с нами.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- График -->
+            <div class="chart-container">
+                <h3 style="color: var(--primary-color); margin-bottom: 30px;">График окупаемости инвестиций</h3>
+                <div class="chart-placeholder" id="chartPlaceholder">
+                    <div style="text-align: center;">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 15px; display: block; color: var(--secondary-color);"></i>
+                        <p>Введите данные и нажмите "Рассчитать окупаемость" для построения графика</p>
+                    </div>
+                </div>
+                <canvas id="roiChart" style="display: none;"></canvas>
+            </div>
+
+            <!-- Детали расчета -->
+            <div class="calculation-details">
+                <h3 style="color: var(--primary-color); margin-bottom: 30px;">Детали расчета</h3>
+                <div class="details-grid">
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                        <div class="detail-value" id="detailVolume">-</div>
+                        <div class="detail-label">Объем перерабатываемых отходов</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="detail-value" id="detailEnergy">-</div>
+                        <div class="detail-label">Потребление энергии</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                        <div class="detail-value" id="detailReduction">-</div>
+                        <div class="detail-label">Сокращение объема отходов</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="detail-value" id="detailIncome">-</div>
+                        <div class="detail-label">Доход от вторсырья</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA секция -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Готовы к внедрению?</h2>
+                <p>Получите бесплатную консультацию и точный расчет для вашего бизнеса</p>
+                <div style="margin-top: 30px;">
+                    <a href="contacts.html" class="btn btn-light btn-large">
+                        <i class="fas fa-phone"></i> Получить консультацию
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>GAIA</h3>
+                    <p>Профессиональные решения для утилизации органических отходов</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> +7 (XXX) XXX-XX-XX</li>
+                        <li><i class="fas fa-envelope"></i> info@gaia-ru.ru</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Адрес компании</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Решения</h3>
+                    <ul class="footer-links">
+                        <li><a href="solutions.html">Для ресторанов</a></li>
+                        <li><a href="solutions.html">Для производств</a></li>
+                        <li><a href="solutions.html">Для больниц</a></li>
+                        <li><a href="solutions.html">Для сельского хозяйства</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GAIA. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Обновление значений ползунков
+        document.getElementById('wasteVolume').addEventListener('input', function() {
+            document.getElementById('volumeValue').textContent = this.value + ' кг';
+        });
+
+        document.getElementById('currentCost').addEventListener('input', function() {
+            document.getElementById('costValue').textContent = parseInt(this.value).toLocaleString('ru-RU') + ' ₽';
+        });
+
+        document.getElementById('energyCost').addEventListener('input', function() {
+            document.getElementById('energyValue').textContent = this.value + ' ₽/кВт·ч';
+        });
+
+        // Расчет окупаемости
+        function calculateROI() {
+            // Получаем значения из формы
+            const wasteVolume = parseInt(document.getElementById('wasteVolume').value);
+            const currentCost = parseInt(document.getElementById('currentCost').value);
+            const energyCost = parseFloat(document.getElementById('energyCost').value);
+            const equipmentModel = document.getElementById('equipmentModel').value;
+
+            // Стоимость оборудования в зависимости от модели
+            const equipmentCosts = {
+                'compact': 1200000,
+                'standard': 1800000,
+                'premium': 2500000,
+                'industrial': 3500000
+            };
+
+            const equipmentCost = equipmentCosts[equipmentModel];
+
+            // Расчеты
+            const energyConsumption = wasteVolume * 0.8; // кВт·ч на кг отходов
+            const monthlyEnergyCost = energyConsumption * energyCost;
+            const monthlySavings = currentCost - monthlyEnergyCost;
+            const additionalIncome = wasteVolume * 5; // Доход от продажи сырья (5 руб/кг)
+            const totalMonthlyProfit = monthlySavings + additionalIncome;
+            const paybackMonths = equipmentCost / totalMonthlyProfit;
+            const annualProfit = totalMonthlyProfit * 12;
+            const roi3years = ((totalMonthlyProfit * 36 - equipmentCost) / equipmentCost * 100).toFixed(1);
+
+            // Обновляем результаты
+            document.getElementById('monthlySavings').textContent = Math.round(totalMonthlyProfit).toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('paybackPeriod').textContent = paybackMonths.toFixed(1) + ' мес';
+            document.getElementById('annualProfit').textContent = Math.round(annualProfit).toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('roi3years').textContent = roi3years + '%';
+
+            // Обновляем детали
+            document.getElementById('detailVolume').textContent = wasteVolume.toLocaleString('ru-RU') + ' кг/мес';
+            document.getElementById('detailEnergy').textContent = Math.round(energyConsumption) + ' кВт·ч/мес';
+            document.getElementById('detailReduction').textContent = '90%';
+            document.getElementById('detailIncome').textContent = Math.round(additionalIncome).toLocaleString('ru-RU') + ' ₽/мес';
+
+            // Строим график
+            createROIChart(equipmentCost, totalMonthlyProfit, paybackMonths);
+        }
+
+        // Создание графика
+        function createROIChart(equipmentCost, monthlyProfit, paybackMonths) {
+            const ctx = document.getElementById('roiChart').getContext('2d');
+            const months = 36; // 3 года
+            const data = [];
+            const labels = [];
+            
+            let cumulative = -equipmentCost;
+            
+            for (let i = 0; i <= months; i++) {
+                if (i > 0) {
+                    cumulative += monthlyProfit;
+                }
+                data.push(cumulative);
+                labels.push(i + ' мес');
+            }
+
+            // Показываем canvas, скрываем placeholder
+            document.getElementById('chartPlaceholder').style.display = 'none';
+            document.getElementById('roiChart').style.display = 'block';
+
+            // Уничтожаем предыдущий график если существует
+            if (window.roiChartInstance) {
+                window.roiChartInstance.destroy();
+            }
+
+            window.roiChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Накопленная прибыль',
+                        data: data,
+                        borderColor: '#2c5530',
+                        backgroundColor: 'rgba(44, 85, 48, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Динамика окупаемости инвестиций'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Прибыль: ' + Math.round(context.parsed.y).toLocaleString('ru-RU') + ' ₽';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('ru-RU') + ' ₽';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Устанавливаем начальные значения
+            document.getElementById('volumeValue').textContent = document.getElementById('wasteVolume').value + ' кг';
+            document.getElementById('costValue').textContent = parseInt(document.getElementById('currentCost').value).toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('energyValue').textContent = document.getElementById('energyCost').value + ' ₽/кВт·ч';
+        });
+    </script>
+</body>
+</html>
