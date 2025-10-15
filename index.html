@@ -27,6 +27,7 @@
         body {
             line-height: 1.6;
             color: var(--text-dark);
+            overflow-x: hidden;
         }
 
         .container {
@@ -41,11 +42,13 @@
             background: var(--primary-color);
             color: var(--white);
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: 600;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
+            font-size: 16px;
+            text-align: center;
         }
 
         .btn:hover {
@@ -66,13 +69,23 @@
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--primary-color);
-            margin-bottom: 60px;
+            margin-bottom: 20px;
             font-weight: 700;
         }
 
-        /* Шапка */
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Шапка с мобильным меню */
         header {
             background: var(--white);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -80,20 +93,21 @@
             width: 100%;
             top: 0;
             z-index: 1000;
+            padding: 15px 0;
         }
 
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary-color);
             text-decoration: none;
+            z-index: 1001;
         }
 
         .nav-links {
@@ -107,42 +121,105 @@
             color: var(--text-dark);
             font-weight: 500;
             transition: color 0.3s ease;
+            font-size: 1rem;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--primary-color);
+        }
+
+        /* Мобильное меню */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 999;
+            padding: 20px 0;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 0 20px;
+        }
+
+        .mobile-nav-links li {
+            margin-bottom: 0;
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .mobile-nav-links a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-nav-links a:hover {
+            color: var(--primary-color);
+            background: var(--background-light);
         }
 
         /* Герой секция */
         .hero {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: var(--white);
-            padding: 180px 0 100px;
-            margin-top: 80px;
+            padding: 120px 0 80px;
+            margin-top: 70px;
         }
 
         .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
             align-items: center;
+            text-align: center;
         }
 
         .hero-text h1 {
-            font-size: 3rem;
+            font-size: 2.2rem;
             margin-bottom: 20px;
             line-height: 1.2;
         }
 
         .hero-text p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 30px;
             opacity: 0.9;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
         .hero-btn {
@@ -150,65 +227,65 @@
             color: var(--primary-color);
         }
 
-        .hero-btn:hover {
-            background: var(--accent-color);
-            color: var(--white);
-        }
-
         .hero-image {
             background: #fff;
             border-radius: 10px;
             padding: 20px;
             text-align: center;
+            width: 100%;
+            max-width: 400px;
         }
 
-        .hero-image img {
-            max-width: 100%;
-            height: auto;
+        .hero-image-placeholder {
+            background: #e0e0e0;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 5px;
+            color: #666;
         }
 
-        /* Секция преимуществ */
+        /* Преимущества */
         .benefits {
             background: var(--background-light);
-            padding: 100px 0;
+            padding: 60px 0;
         }
 
         .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
+            grid-template-columns: 1fr;
+            gap: 25px;
         }
 
         .benefit-card {
             background: var(--white);
             border-radius: 15px;
-            padding: 40px 30px;
+            padding: 30px 25px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
         .benefit-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
         }
 
         .benefit-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 25px;
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
             background: var(--secondary-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
 
         .benefit-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--primary-color);
             margin-bottom: 15px;
             font-weight: 600;
@@ -217,17 +294,18 @@
         .benefit-description {
             color: var(--text-light);
             line-height: 1.6;
+            font-size: 0.95rem;
         }
 
-        /* Секция "Как это работает" */
+        /* Как это работает */
         .how-it-works {
-            padding: 100px 0;
+            padding: 60px 0;
             background: var(--white);
         }
 
         .process-steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: 1fr;
             gap: 30px;
             counter-reset: step;
         }
@@ -235,7 +313,9 @@
         .process-step {
             text-align: center;
             position: relative;
-            padding: 40px 20px;
+            padding: 30px 20px;
+            background: var(--background-light);
+            border-radius: 10px;
         }
 
         .process-step::before {
@@ -245,53 +325,54 @@
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background: var(--primary-color);
             color: var(--white);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
         }
 
         .step-icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--secondary-color);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .step-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--primary-color);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
         .step-description {
             color: var(--text-light);
+            font-size: 0.95rem;
         }
 
         /* Футер */
         footer {
             background: var(--text-dark);
             color: var(--white);
-            padding: 60px 0 30px;
+            padding: 50px 0 20px;
         }
 
         .footer-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
         }
 
         .footer-column h3 {
             color: var(--accent-color);
-            margin-bottom: 20px;
-            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
         }
 
         .footer-links {
@@ -299,13 +380,14 @@
         }
 
         .footer-links li {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .footer-links a {
             color: #ccc;
             text-decoration: none;
             transition: color 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .footer-links a:hover {
@@ -314,67 +396,120 @@
 
         .footer-bottom {
             text-align: center;
-            padding-top: 30px;
+            padding-top: 20px;
             border-top: 1px solid #444;
             color: #999;
+            font-size: 0.9rem;
         }
 
-        /* Адаптивность */
-        @media (max-width: 768px) {
+        /* Адаптивность для планшетов */
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
             .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
+                flex-direction: row;
+                text-align: left;
+                gap: 60px;
             }
-
+            
             .hero-text h1 {
-                font-size: 2.2rem;
+                font-size: 2.8rem;
             }
-
+            
             .hero-buttons {
-                justify-content: center;
-                flex-wrap: wrap;
+                flex-direction: row;
+                max-width: none;
+                margin: 0;
             }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+            
+            .process-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
+        /* Адаптивность для компьютеров */
+        @media (min-width: 1024px) {
+            .hero {
+                padding: 150px 0 100px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .process-steps {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            /* Скрываем мобильное меню на компьютерах */
+            .mobile-menu-btn {
+                display: none !important;
+            }
+            
+            .nav-links {
+                display: flex !important;
+            }
+        }
+
+        /* Показываем мобильное меню на телефонах */
+        @media (max-width: 1023px) {
             .nav-links {
                 display: none;
             }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
+            
             .mobile-menu-btn {
                 display: block;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .benefits-grid,
-            .process-steps {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero {
-                padding: 150px 0 80px;
             }
         }
     </style>
 </head>
 <body>
-<!-- Шапка -->
-<header>
-    <div class="container">
-        <nav class="navbar">
-            <a href="index.html" class="logo">GAIA</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="solutions.html">Решения</a></li>
-                <li><a href="calculator.html">Калькулятор</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    <!-- Шапка с мобильным меню -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">GAIA</a>
+                
+                <!-- Десктопное меню -->
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Главная</a></li>
+                    <li><a href="solutions.html">Решения</a></li>
+                    <li><a href="calculator.html">Калькулятор</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+                
+                <!-- Кнопка мобильного меню -->
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+
+            <!-- Мобильное меню -->
+            <div class="mobile-menu" id="mobileMenu">
+                <ul class="mobile-nav-links">
+                    <li><a href="index.html" onclick="closeMobileMenu()">Главная</a></li>
+                    <li><a href="solutions.html" onclick="closeMobileMenu()">Решения</a></li>
+                    <li><a href="calculator.html" onclick="closeMobileMenu()">Калькулятор</a></li>
+                    <li><a href="contacts.html" onclick="closeMobileMenu()">Контакты</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
 
     <!-- Герой секция -->
     <section class="hero">
@@ -384,14 +519,13 @@
                     <h1>Профессиональная утилизация пищевых отходов</h1>
                     <p>Превращаем органические отходы в ресурс. Автоматические решения для ресторанов, производств и больниц.</p>
                     <div class="hero-buttons">
-                        <a href="#calculator" class="btn hero-btn">Рассчитать экономию</a>
-                        <a href="#contacts" class="btn btn-secondary">Получить консультацию</a>
+                        <a href="calculator.html" class="btn hero-btn">Рассчитать экономию</a>
+                        <a href="contacts.html" class="btn btn-secondary">Получить консультацию</a>
                     </div>
                 </div>
                 <div class="hero-image">
-                    <!-- Заглушка для изображения аппарата -->
-                    <div style="background: #e0e0e0; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 5px;">
-                        <span style="color: #666;">Изображение аппарата GAIA</span>
+                    <div class="hero-image-placeholder">
+                        <span>Изображение аппарата GAIA</span>
                     </div>
                 </div>
             </div>
@@ -399,9 +533,11 @@
     </section>
 
     <!-- Преимущества -->
-    <section class="benefits" id="benefits">
+    <section class="benefits">
         <div class="container">
             <h2 class="section-title">Почему выбирают GAIA</h2>
+            <p class="section-subtitle">Инновационные решения для эффективной утилизации органических отходов</p>
+            
             <div class="benefits-grid">
                 <div class="benefit-card">
                     <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
@@ -428,9 +564,11 @@
     </section>
 
     <!-- Как это работает -->
-    <section class="how-it-works" id="how-it-works">
+    <section class="how-it-works">
         <div class="container">
             <h2 class="section-title">Как это работает</h2>
+            <p class="section-subtitle">Простой и эффективный процесс переработки отходов</p>
+            
             <div class="process-steps">
                 <div class="process-step">
                     <div class="step-icon"><i class="fas fa-upload"></i></div>
@@ -457,7 +595,7 @@
     </section>
 
     <!-- Футер -->
-    <footer id="contacts">
+    <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
@@ -475,10 +613,10 @@
                 <div class="footer-column">
                     <h3>Решения</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Для ресторанов</a></li>
-                        <li><a href="#">Для производств</a></li>
-                        <li><a href="#">Для больниц</a></li>
-                        <li><a href="#">Для сельского хозяйства</a></li>
+                        <li><a href="solutions.html">Для ресторанов</a></li>
+                        <li><a href="solutions.html">Для производств</a></li>
+                        <li><a href="solutions.html">Для больниц</a></li>
+                        <li><a href="solutions.html">Для сельского хозяйства</a></li>
                     </ul>
                 </div>
             </div>
@@ -487,66 +625,38 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Функции мобильного меню
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.remove('active');
+        }
+
+        // Закрываем меню при клике вне его
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (mobileMenu && menuBtn) {
+                if (!mobileMenu.contains(event.target) && !menuBtn.contains(event.target)) {
+                    mobileMenu.classList.remove('active');
+                }
+            }
+        });
+
+        // Закрываем меню при изменении ориентации экрана
+        window.addEventListener('orientationchange', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
-<style>
-    /* Мобильное меню */
-    .mobile-menu-btn {
-        display: none;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: var(--primary-color);
-        cursor: pointer;
-    }
-
-    .mobile-menu {
-        display: none;
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        background: var(--white);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        z-index: 999;
-    }
-
-    .mobile-menu.active {
-        display: block;
-    }
-
-    .mobile-nav-links {
-        list-style: none;
-        padding: 20px;
-    }
-
-    .mobile-nav-links li {
-        margin-bottom: 15px;
-    }
-
-    .mobile-nav-links a {
-        display: block;
-        padding: 15px;
-        text-decoration: none;
-        color: var(--text-dark);
-        font-weight: 500;
-        border-bottom: 1px solid #f0f0f0;
-        font-size: 1.1rem;
-    }
-
-    .mobile-nav-links a:hover {
-        color: var(--primary-color);
-        background: var(--background-light);
-    }
-
-    /* Показываем кнопку меню на мобильных */
-    @media (max-width: 767px) {
-        .nav-links {
-            display: none;
-        }
-        
-        .mobile-menu-btn {
-            display: block;
-        }
-    }
-</style>
